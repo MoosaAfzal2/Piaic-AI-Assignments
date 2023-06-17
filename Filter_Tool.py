@@ -22,7 +22,7 @@ def add_image():
     global file_path
     file_path = filedialog.askopenfilename()
     image = Image.open(file_path)
-    image = image.resize((600, int((image.height / image.width)*600)))
+    image = image.resize((600, int((image.height / image.width) * 600)))
     tkimage = ImageTk.PhotoImage(image)
     canvas.image = tkimage
     canvas.create_image(0, 0, image=tkimage, anchor="nw")
@@ -34,7 +34,7 @@ image_button.pack(pady=15)
 
 def Apply_filter(filter):
     image = Image.open(file_path)
-    image = image.resize((600, int((image.height / image.width)*600)))
+    image = image.resize((600, int((image.height / image.width) * 600)))
     filtered_image = image.filter(filter)
     tkimage = ImageTk.PhotoImage(filtered_image)
     canvas.image = tkimage
@@ -50,9 +50,18 @@ def selection_changed(event):
         Apply_filter(ImageFilter.SMOOTH)
     if selection == "Sharpen":
         Apply_filter(ImageFilter.SHARPEN)
+    if selection == "GrayScale":
+        image = Image.open(file_path)
+        image = image.resize((600, int((image.height / image.width) * 600)))
+        filtered_image = image.convert("L")
+        tkimage = ImageTk.PhotoImage(filtered_image)
+        canvas.image = tkimage
+        canvas.create_image(0, 0, image=tkimage, anchor="nw")
 
 
-combo = ttk.Combobox(values=["Blur", "Smooth", "Sharpen"], state="readonly")
+combo = ttk.Combobox(
+    values=["Blur", "Smooth", "Sharpen", "GrayScale"], state="readonly"
+)
 combo.bind("<<ComboboxSelected>>", selection_changed)
 combo.place(x=30, y=50)
 
